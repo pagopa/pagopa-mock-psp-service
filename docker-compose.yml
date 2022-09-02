@@ -1,0 +1,21 @@
+version: "3.2"
+
+services:
+  mock-psp:
+    container_name: 'mock-psp'
+    ports:
+      - "8090:8090"
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    networks:
+      - mock-net
+
+
+
+networks:
+  mock-net:
+    driver: bridge
+    driver_opts:
+      com.docker.network.driver.mtu: 1450
+

@@ -11,3 +11,4 @@ EXPOSE 8090
 
 RUN npm run generate build
 CMD ["node", "dist/index.js"]
+

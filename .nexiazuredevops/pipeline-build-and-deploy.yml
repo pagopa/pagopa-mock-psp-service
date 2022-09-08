@@ -13,7 +13,7 @@ parameters:
       - sit
 
 variables:
-  repository: 'nodo-mock-psp'
+  repository: 'mock-psp'
   dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
   kustomizeFolderApp: '$(Build.SourcesDirectory)/kustomize-mock-psp'
 
@@ -125,5 +125,5 @@ stages:
             inputs:
               action: 'deploy'
               kubernetesServiceConnection:  $(kubernetes-service-connection-${{ parameters.env }})
-              namespace: nodo-mock-psp-${{ parameters.env }}
+              namespace: mock-psp-${{ parameters.env }}
               manifests: $(Pipeline.Workspace)/$(appVersion)-${{ parameters.env }}-manifest-app/*.yaml

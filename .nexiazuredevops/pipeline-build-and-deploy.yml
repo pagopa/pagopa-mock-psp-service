@@ -1,9 +1,7 @@
 pr: none
 trigger: none
-
 pool:
   vmImage: 'ubuntu-latest'
-
 parameters:
   - name: env
     displayName: Environment to deploy
@@ -11,12 +9,10 @@ parameters:
     values:
       - dev
       - sit
-
 variables:
   repository: 'mock-psp'
   dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
   kustomizeFolderApp: '$(Build.SourcesDirectory)/kustomize-mock-psp'
-
 stages:
   - stage: retrieve_info
     displayName: "Retrieve info (${{ parameters.env }})"
@@ -27,13 +23,11 @@ stages:
           - checkout: self
             clean: true
             persistCredentials: true
-
           - script: |
               APP_VERSION=$(jq -r .version package.json)
               echo "##vso[task.setvariable variable=APP_VERSION;isOutput=true]$APP_VERSION"
             displayName: Set version
             name: getVar
-
   - stage: build
     displayName: "Build (${{ parameters.env }})"
     condition: succeeded()
@@ -44,16 +38,27 @@ stages:
       - name: appVersion
         value: $[ stageDependencies.retrieve_info.retrieve_info.outputs['getVar.APP_VERSION'] ]
     jobs:
+      - job: build_npm
+        displayName: buildnpm
+        steps:
+        - task: NodeTool@0
+          inputs:
+            versionSpec: '16.x'
+          displayName: 'Install Node.js'
+        - script: |
+            npm install
+          displayName: 'npm install'
+        - script: |
+            npm run generate build
+          displayName: 'npm build'
       - job: build
         displayName: "Build (${{ parameters.env }})"
         steps:
           - checkout: self
             clean: true
             persistCredentials: true
-
           - script: cp .nexi.env .env
             displayName: 'Copy env'
-
           - task: Docker@2
             displayName: 'Build and push image'
             inputs:
@@ -62,7 +67,6 @@ stages:
               command: 'buildAndPush'
               Dockerfile: $(dockerfile)
               tags: $(appVersion)
-
   - stage: push_manifest
     displayName: "Push manifest (${{ parameters.env }})"
     condition: succeeded()
@@ -79,7 +83,6 @@ stages:
           - checkout: self
             clean: true
             persistCredentials: true
-
           - task: KubernetesManifest@0
             name: "bakeApp"
             inputs:
@@ -88,11 +91,9 @@ stages:
               kustomizationPath: $(kustomizeFolderApp)/${{ parameters.env }}
               containers: $(repository-docker-${{ parameters.env }})/$(repository):$(appVersion)
             displayName: "Create manifest app (${{ parameters.env }})"
-
           - publish: $(bakeApp.manifestsBundle)
             displayName: "Publish manifest app (${{ parameters.env }})"
             artifact: $(appVersion)-${{ parameters.env }}-manifest-app
-
   - stage: deploy
     displayName: "Deploy (${{ parameters.env }})"
     dependsOn:
@@ -110,16 +111,13 @@ stages:
         pool: $(deploy-pool-${{ parameters.env }})
         steps:
           - checkout: none
-
           - script: |
               ls -la $(Pipeline.Workspace)/$(appVersion)-${{ parameters.env }}-manifest-app
               rm -rf $(Pipeline.Workspace)/$(appVersion)-${{ parameters.env }}-manifest-app
             displayName: "Clean old cached files $(appVersion)-${{ parameters.env }}-manifest-app"
-
           - download: current
             artifact: $(appVersion)-${{ parameters.env }}-manifest-app
             displayName: "Download manifest app $(appVersion)-${{ parameters.env }}-manifest-app"
-
           - task: KubernetesManifest@0
             displayName: "Deploy manifest for app"
             inputs:

@@ -174,23 +174,41 @@ export async function newExpressApp(
     }
   });
 
+  function ritorno(res: any, customResponse: string | undefined ){
+    return res.status(customResponse && customResponse.trim() === '<response>error</response>' ? 500 : 200)
+    .send(customResponse);
+  }
+
   // SOAP Server mock entrypoint
   // eslint-disable-next-line complexity
   // eslint-disable-next-line sonarjs/cognitive-complexity, complexity
   app.post(config.PA_MOCK.ROUTES.PPT_NODO, async (req, res) => {
     logger.info(`>>> rx REQUEST :`);
     logger.info(JSON.stringify(req.body));
+    const sleep = (ms:number) => new Promise(r => setTimeout(r, ms));
     try {
       const soapRequest = req.body['soapenv:envelope']['soapenv:body'][0];
-      
       // 1. pspNotifyPayment
       if (soapRequest[pspnotifypaymentreq]) {
         if (pspNotifyPaymentQueue.length > 0) {
           const customResponse = pspNotifyPaymentQueue.shift();
           logger.info(`>>> tx customResponse RESPONSE [${customResponse}]: `);
-          return res
-            .status(customResponse && customResponse.includes('PAA_ERRORE_MOCK') ? 500 : 200)
-            .send(customResponse);
+          if (customResponse !== undefined) {         
+            let convert = await xml2js.parseStringPromise(customResponse);
+            let delay = convert['soapenv:Envelope']['soapenv:Body'][0]['psp:pspNotifyPaymentRes'][0].delay;
+            delete convert['soapenv:Envelope']['soapenv:Body'][0]['psp:pspNotifyPaymentRes'][0].delay;
+            const builder = new xml2js.Builder();
+            const xml = builder.buildObject(convert);
+            var delay_numb: number = +delay[0];
+            logger.info(delay_numb);
+            if (delay) {
+              logger.info('>>> start timeout')
+              await sleep(delay_numb);
+              return ritorno(res,xml);
+            } else {
+              return ritorno(res, customResponse);
+            }
+          }
         }
         const pspnotifypayment = soapRequest[pspnotifypaymentreq][0];
         const auxdigit = config.PA_MOCK.AUX_DIGIT;
@@ -217,9 +235,22 @@ export async function newExpressApp(
         if (pspInviaRPTQueue.length > 0) {
           const customResponse = pspInviaRPTQueue.shift();
           logger.info(`>>> tx customResponse RESPONSE [${customResponse}]: `);
-          return res
-            .status(customResponse && customResponse.includes('PAA_ERRORE_MOCK') ? 500 : 200)
-            .send(customResponse);
+          if (customResponse !== undefined) {         
+            let convert = await xml2js.parseStringPromise(customResponse);
+            let delay = convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspInviaRPTResponse'][0]['pspInviaRPTResponse'][0].delay;
+            delete convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspInviaRPTResponse'][0]['pspInviaRPTResponse'][0].delay;
+            const builder = new xml2js.Builder();
+            const xml = builder.buildObject(convert);
+            var delay_numb: number = +delay[0];
+            logger.info(delay_numb);
+            if (delay) {
+              logger.info('>>> start timeout')
+              await sleep(delay_numb);
+              return ritorno(res,xml);
+            } else {
+              return ritorno(res, customResponse);
+            }
+          }
         }
         log_event_tx(pspInviaRPTRes);
         return res.status(+pspInviaRPTRes[0]).send(pspInviaRPTRes[1]);
@@ -230,9 +261,22 @@ export async function newExpressApp(
         if (pspInviaCarrelloRPTCarteQueue.length > 0) {
           const customResponse = pspInviaCarrelloRPTCarteQueue.shift();
           logger.info(`>>> tx customResponse RESPONSE [${customResponse}]: `);
-          return res
-            .status(customResponse && customResponse.includes('PAA_ERRORE_MOCK') ? 500 : 200)
-            .send(customResponse);
+          if (customResponse !== undefined) {         
+            let convert = await xml2js.parseStringPromise(customResponse);
+            let delay = convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspInviaCarrelloRPTCarteResponse'][0]['pspInviaCarrelloRPTCarteResponse'][0].delay;
+            delete convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspInviaCarrelloRPTCarteResponse'][0]['pspInviaCarrelloRPTCarteResponse'][0].delay;
+            const builder = new xml2js.Builder();
+            const xml = builder.buildObject(convert);
+            var delay_numb: number = +delay[0];
+            logger.info(delay_numb);
+            if (delay) {
+              logger.info('>>> start timeout')
+              await sleep(delay_numb);
+              return ritorno(res,xml);
+            } else {
+              return ritorno(res, customResponse);
+            }
+          }
         }
         log_event_tx(pspInviaCarrelloRPTCarteRes);
         return res.status(+pspInviaCarrelloRPTCarteRes[0]).send(pspInviaCarrelloRPTCarteRes[1]);
@@ -243,9 +287,22 @@ export async function newExpressApp(
         if (pspInviaCarrelloRPTQueue.length > 0) {
           const customResponse = pspInviaCarrelloRPTQueue.shift();
           logger.info(`>>> tx customResponse RESPONSE [${customResponse}]: `);
-          return res
-            .status(customResponse && customResponse.includes('PAA_ERRORE_MOCK') ? 500 : 200)
-            .send(customResponse);
+          if (customResponse !== undefined) {         
+            let convert = await xml2js.parseStringPromise(customResponse);
+            let delay = convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspInviaCarrelloRPTResponse'][0]['pspInviaCarrelloRPTResponse'][0].delay;
+            delete convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspInviaCarrelloRPTResponse'][0]['pspInviaCarrelloRPTResponse'][0].delay;
+            const builder = new xml2js.Builder();
+            const xml = builder.buildObject(convert);
+            var delay_numb: number = +delay[0];
+            logger.info(delay_numb);
+            if (delay) {
+              logger.info('>>> start timeout')
+              await sleep(delay_numb);
+              return ritorno(res,xml);
+            } else {
+              return ritorno(res, customResponse);
+            }
+          }
         }
         log_event_tx(pspInviaCarrelloRPTRes);
         return res.status(+pspInviaCarrelloRPTRes[0]).send(pspInviaCarrelloRPTRes[1]);
@@ -256,9 +313,22 @@ export async function newExpressApp(
         if (pspInviaAckRTQueue.length > 0) {
           const customResponse = pspInviaAckRTQueue.shift();
           logger.info(`>>> tx customResponse RESPONSE [${customResponse}]: `);
-          return res
-            .status(customResponse && customResponse.includes('PAA_ERRORE_MOCK') ? 500 : 200)
-            .send(customResponse);
+          if (customResponse !== undefined) {         
+            let convert = await xml2js.parseStringPromise(customResponse);
+            let delay = convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspInviaAckRTResponse'][0]['pspInviaAckRTResponse'][0].delay;
+            delete convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspInviaAckRTResponse'][0]['pspInviaAckRTResponse'][0].delay;
+            const builder = new xml2js.Builder();
+            const xml = builder.buildObject(convert);
+            var delay_numb: number = +delay[0];
+            logger.info(delay_numb);
+            if (delay) {
+              logger.info('>>> start timeout')
+              await sleep(delay_numb);
+              return ritorno(res,xml);
+            } else {
+              return ritorno(res, customResponse);
+            }
+          }
         }
         log_event_tx(pspInviaAckRTRes);
         return res.status(+pspInviaAckRTRes[0]).send(pspInviaAckRTRes[1]);
@@ -269,9 +339,22 @@ export async function newExpressApp(
         if (pspChiediRTQueue.length > 0) {
           const customResponse = pspChiediRTQueue.shift();
           logger.info(`>>> tx customResponse RESPONSE [${customResponse}]: `);
-          return res
-            .status(customResponse && customResponse.includes('PAA_ERRORE_MOCK') ? 500 : 200)
-            .send(customResponse);
+          if (customResponse !== undefined) {         
+            let convert = await xml2js.parseStringPromise(customResponse);
+            let delay = convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspChiediRTResponse'][0]['pspChiediRTResponse'][0].delay;
+            delete convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspChiediRTResponse'][0]['pspChiediRTResponse'][0].delay;
+            const builder = new xml2js.Builder();
+            const xml = builder.buildObject(convert);
+            var delay_numb: number = +delay[0];
+            logger.info(delay_numb);
+            if (delay) {
+              logger.info('>>> start timeout')
+              await sleep(delay_numb);
+              return ritorno(res,xml);
+            } else {
+              return ritorno(res, customResponse);
+            }
+          }
         }
         log_event_tx(pspChiediRTRes);
         return res.status(+pspChiediRTRes[0]).send(pspChiediRTRes[1]);
@@ -282,9 +365,22 @@ export async function newExpressApp(
         if (pspChiediListaRTQueue.length > 0) {
           const customResponse = pspChiediListaRTQueue.shift();
           logger.info(`>>> tx customResponse RESPONSE [${customResponse}]: `);
-          return res
-            .status(customResponse && customResponse.includes('PAA_ERRORE_MOCK') ? 500 : 200)
-            .send(customResponse);
+          if (customResponse !== undefined) {         
+            let convert = await xml2js.parseStringPromise(customResponse);
+            let delay = convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspChiediListaRTResponse'][0]['pspChiediListaRTResponse'][0].delay;
+            delete convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspChiediListaRTResponse'][0]['pspChiediListaRTResponse'][0].delay;
+            const builder = new xml2js.Builder();
+            const xml = builder.buildObject(convert);
+            var delay_numb: number = +delay[0];
+            logger.info(delay_numb);
+            if (delay) {
+              logger.info('>>> start timeout')
+              await sleep(delay_numb);
+              return ritorno(res,xml);
+            } else {
+              return ritorno(res, customResponse);
+            }
+          }
         }
         log_event_tx(pspChiediListaRTRes);
         return res.status(+pspChiediListaRTRes[0]).send(pspChiediListaRTRes[1]);
@@ -295,9 +391,22 @@ export async function newExpressApp(
         if (pspChiediAvanzamentoRPTQueue.length > 0) {
           const customResponse = pspChiediAvanzamentoRPTQueue.shift();
           logger.info(`>>> tx customResponse RESPONSE [${customResponse}]: `);
-          return res
-            .status(customResponse && customResponse.includes('PAA_ERRORE_MOCK') ? 500 : 200)
-            .send(customResponse);
+          if (customResponse !== undefined) {         
+            let convert = await xml2js.parseStringPromise(customResponse);
+            let delay = convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspChiediAvanzamentoRPTResponse'][0]['pspChiediAvanzamentoRPTResponse'][0].delay;
+            delete convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspChiediAvanzamentoRPTResponse'][0]['pspChiediAvanzamentoRPTResponse'][0].delay;
+            const builder = new xml2js.Builder();
+            const xml = builder.buildObject(convert);
+            var delay_numb: number = +delay[0];
+            logger.info(delay_numb);
+            if (delay) {
+              logger.info('>>> start timeout')
+              await sleep(delay_numb);
+              return ritorno(res,xml);
+            } else {
+              return ritorno(res, customResponse);
+            }
+          }
         }
         log_event_tx(pspChiediAvanzamentoRPTRes);
         return res.status(+pspChiediAvanzamentoRPTRes[0]).send(pspChiediAvanzamentoRPTRes[1]);

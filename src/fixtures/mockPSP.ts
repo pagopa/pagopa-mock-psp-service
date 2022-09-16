@@ -105,7 +105,7 @@ export const pspChiediListaRTRes: MockResponse = [
     <soapenv:Body>
       <ws:pspChiediListaRTResponse>
           <pspChiediListaRTResponse>
-      <elementoListaRTResponse>
+            <elementoListaRTResponse>
                 <identificativoDominio>77777777777</identificativoDominio>
                 <identificativoUnivocoVersamento>randomIuv</identificativoUnivocoVersamento>
                 <codiceContestoPagamento>1583148755603</codiceContestoPagamento>

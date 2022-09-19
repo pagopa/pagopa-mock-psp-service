@@ -1,7 +1,9 @@
 FROM node:14-alpine
+RUN pwd
+RUN ls -lrt
 COPY dist dist
 COPY node_modules node_modules
-RUN ls -lrt
+
 WORKDIR /src
 COPY ["package.json", "package-lock.json*", "./"]
 COPY . .

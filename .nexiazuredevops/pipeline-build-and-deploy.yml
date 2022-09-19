@@ -69,7 +69,7 @@ stages:
     displayName: "Push manifest (${{ parameters.env }})"
     condition: succeeded()
     dependsOn:
-      - retrieve_info
+      - build
     variables:
       - group: nodo-integration-test-vg-${{ parameters.env }}
       - name: appVersion
@@ -95,8 +95,6 @@ stages:
   - stage: deploy
     displayName: "Deploy (${{ parameters.env }})"
     dependsOn:
-      - retrieve_info
-      - build
       - push_manifest
     variables:
       - group: nodo-integration-test-vg-${{ parameters.env }}

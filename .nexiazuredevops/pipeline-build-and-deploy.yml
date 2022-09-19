@@ -53,7 +53,7 @@ stages:
             pwd
             ls -lrt
           displayName: 'npm build'
-  - stage: build
+  - stage: build-v1
     displayName: "Build-v1-(${{ parameters.env }})"
     condition: succeeded()
     dependsOn:

@@ -50,7 +50,19 @@ stages:
           displayName: 'npm install'
         - script: |
             npm run generate build
+            pwd
+            ls -lrt
           displayName: 'npm build'
+  - stage: buildv1
+    displayName: "Build-v1-(${{ parameters.env }})"
+    condition: succeeded()
+    dependsOn:
+      - retrieve_info
+    variables:
+      - group: nodo-integration-test-vg-${{ parameters.env }}
+      - name: appVersion
+        value: $[ stageDependencies.retrieve_info.retrieve_info.outputs['getVar.APP_VERSION'] ]
+    jobs:
       - job: build
         displayName: "Build (${{ parameters.env }})"
         steps:

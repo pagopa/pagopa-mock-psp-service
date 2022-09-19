@@ -53,32 +53,18 @@ stages:
             pwd
             ls -lrt
           displayName: 'npm build'
-  - stage: buildv1
-    displayName: "Build-v1-(${{ parameters.env }})"
-    condition: succeeded()
-    dependsOn:
-      - retrieve_info
-    variables:
-      - group: nodo-integration-test-vg-${{ parameters.env }}
-      - name: appVersion
-        value: $[ stageDependencies.retrieve_info.retrieve_info.outputs['getVar.APP_VERSION'] ]
-    jobs:
-      - job: build
-        displayName: "Build (${{ parameters.env }})"
-        steps:
-          - checkout: self
-            clean: true
-            persistCredentials: true
-          - script: cp .nexi.env .env
-            displayName: 'Copy env'
-          - task: Docker@2
-            displayName: 'Build and push image'
-            inputs:
+        - script: |
+            cp .nexi.env .env
+          displayName: 'Copy env'
+        - task: Docker@2
+          displayName: 'Build and push image'
+          inputs:
               containerRegistry: $(container-registry-service-connection-${{ parameters.env }})
               repository: $(repository)
               command: 'buildAndPush'
               Dockerfile: $(dockerfile)
               tags: $(appVersion)
+   
   - stage: push_manifest
     displayName: "Push manifest (${{ parameters.env }})"
     condition: succeeded()

@@ -123,10 +123,10 @@ stages:
           - download: current
             artifact: $(appVersion)-${{ parameters.env }}-manifest-app
             displayName: "Download manifest app $(appVersion)-${{ parameters.env }}-manifest-app"
-          - task: KubernetesManifest@0
-            displayName: "Deploy manifest for app"
-            inputs:
-              action: 'deploy'
-              kubernetesServiceConnection:  $(kubernetes-service-connection-${{ parameters.env }})
-              namespace: mock-psp-${{ parameters.env }}
-              manifests: $(Pipeline.Workspace)/$(appVersion)-${{ parameters.env }}-manifest-app/*.yaml
+          - script: |
+              az aks install-cli
+              az aks get-credentials --resource-group DDS-Kubernetes --name ddsakstest
+              kubectl get nodes
+              kubectl apply -f $(Pipeline.Workspace)/$(appVersion)-${{ parameters.env }}-manifest-app/*.yaml
+            displayName: "Deploy the application"
+          

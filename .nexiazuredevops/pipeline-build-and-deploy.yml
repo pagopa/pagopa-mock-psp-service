@@ -123,8 +123,13 @@ stages:
           - download: current
             artifact: $(appVersion)-${{ parameters.env }}-manifest-app
             displayName: "Download manifest app $(appVersion)-${{ parameters.env }}-manifest-app"
+          - script: |
+              whereis pip3
+              whereis pip
+              export PATH=/usr/bin:/usr/local/bin:$PATH 
+            displayName: "Add environment variables"         
           # Update to latest Azure CLI version
-          - bash: pip install --pre azure-cli --extra-index-url https://azurecliprod.blob.core.windows.net/edge
+          - bash: pip3 install --pre azure-cli --extra-index-url https://azurecliprod.blob.core.windows.net/edge
             displayName: 'Upgrade Azure CLI'
           - script: |
               

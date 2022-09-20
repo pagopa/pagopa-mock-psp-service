@@ -48,6 +48,7 @@ stages:
           displayName: 'Install Node.js'
         - script: |
             echo "VERSIONE: $appVersion"
+            echo "Ver2: $[ stageDependencies.retrieve_info.retrieve_info.outputs['getVar.APP_VERSION'] ]"
             npm install --legacy-peer-deps
           displayName: 'npm install'
         - script: |
@@ -110,6 +111,7 @@ stages:
         steps:
           - checkout: none
           - script: |
+              echo "Ver2: $[ stageDependencies.retrieve_info.retrieve_info.outputs['getVar.APP_VERSION'] ]"
               ls -la $(Pipeline.Workspace)/$(appVersion)-${{ parameters.env }}-manifest-app
               rm -rf $(Pipeline.Workspace)/$(appVersion)-${{ parameters.env }}-manifest-app
             displayName: "Clean old cached files $(appVersion)-${{ parameters.env }}-manifest-app"

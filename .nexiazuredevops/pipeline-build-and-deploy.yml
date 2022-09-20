@@ -126,11 +126,12 @@ stages:
           - script: |
               whereis pip3
               whereis pip
+              whereis az
               export PATH=/usr/bin:/usr/local/bin:$PATH 
             displayName: "Add environment variables"         
           # Update to latest Azure CLI version
-          - bash: pip3 install --pre azure-cli
-            displayName: 'Upgrade Azure CLI'
+          #- bash: pip3 install --pre azure-cli
+            #displayName: 'Upgrade Azure CLI'
           - script: |
               az login --username SorrentinoSalvatoreAzure@sia365.onmicrosoft.com
               az extension add -n azure-devops

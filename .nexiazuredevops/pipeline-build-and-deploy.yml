@@ -30,6 +30,7 @@ stages:
               echo "##vso[task.setvariable variable=APP_VERSION;isOutput=true]$APP_VERSION"
             displayName: Set version
             name: getVar
+            
   - stage: build
     displayName: "Build (${{ parameters.env }})"
     condition: succeeded()
@@ -73,6 +74,7 @@ stages:
     displayName: "Push manifest (${{ parameters.env }})"
     condition: succeeded()
     dependsOn:
+      - retrieve_info
       - build
     variables:
       - group: nodo-integration-test-vg-${{ parameters.env }}

@@ -24,8 +24,6 @@ stages:
             clean: true
             persistCredentials: true
           - script: |
-              pwd
-              ls -lrt
               APP_VERSION=$(grep -Po '"version": *\K"[^"]*"' package.json | sed 's/"//g')
               echo "##vso[task.setvariable variable=APP_VERSION;isOutput=true]$APP_VERSION"
             displayName: Set version
@@ -38,7 +36,7 @@ stages:
     variables:
       - group: nodo-integration-test-vg-${{ parameters.env }}
       - name: appVersion
-        value: $[ stageDependencies.retrieve_info.retrieve_info.outputs['getVar.APP_VERSION'] ]
+        value: $[stageDependencies.retrieve_info.retrieve_info.outputs['getVar.APP_VERSION'] ]
     jobs:
       - job: build_npm
         displayName: buildnpm
@@ -75,7 +73,7 @@ stages:
     variables:
       - group: nodo-integration-test-vg-${{ parameters.env }}
       - name: appVersion
-        value: $[ stageDependencies.retrieve_info.retrieve_info.outputs['getVar.APP_VERSION'] ]
+        value: $[stageDependencies.retrieve_info.retrieve_info.outputs['getVar.APP_VERSION'] ]
     jobs:
       - job: push_manifest
         displayName: "Push manifest ${{ parameters.env }}"
@@ -101,7 +99,7 @@ stages:
     variables:
       - group: nodo-integration-test-vg-${{ parameters.env }}
       - name: appVersion
-        value: $[ stageDependencies.retrieve_info.retrieve_info.outputs['getVar.APP_VERSION'] ]
+        value: $[stageDependencies.retrieve_info.retrieve_info.outputs['getVar.APP_VERSION'] ]
     condition: succeeded()
     jobs:
       - job: deploy

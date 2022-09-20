@@ -124,12 +124,13 @@ stages:
             artifact: $(appVersion)-${{ parameters.env }}-manifest-app
             displayName: "Download manifest app $(appVersion)-${{ parameters.env }}-manifest-app"
 
-          - task: AzureCLI@2
+
+          - task: Kubernetes@1
+            displayName: 'Get Deployment'
             inputs:
-              azureSubscription: 'dds-kubernetes-sc-arm-dev'
-              scriptType: 'pscore'
-              scriptLocation: 'inlineScript'
-              inlineScript: |
-                az aks get-credentials --resource-group DDS-Kubernetes --name ddsakstest
-                kubectl apply -f $(Pipeline.Workspace)/$(appVersion)-${{ parameters.env }}-manifest-app/*.yaml
+              connectionType: 'Kubernetes Service Connection'
+              kubernetesServiceEndpoint: 'nodo-srvendpoint_kubernetes_sa_integration_test_mock_dev'
+              namespace: 'mock-psp-dev'
+              command: 'apply'
+              arguments: "-f $(Pipeline.Workspace)/$(appVersion)-${{ parameters.env }}-manifest-app/*.yaml"
           

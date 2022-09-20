@@ -25,6 +25,7 @@ stages:
             persistCredentials: true
           - script: |
               pwd
+              ls -lrt
               APP_VERSION=$(jq -r .version package.json)
               echo "##vso[task.setvariable variable=APP_VERSION;isOutput=true]$APP_VERSION"
             displayName: Set version

@@ -37,7 +37,7 @@ stages:
     dependsOn:
       - retrieve_info
     variables:
-      - group: nodo-integration-test-${{ parameters.env }}
+      - group: nodo-integration-test-vg-${{ parameters.env }}
       - name: appVersion
         value: $[ stageDependencies.retrieve_info.retrieve_info.outputs['getVar.APP_VERSION'] ]
     jobs:
@@ -77,7 +77,7 @@ stages:
       - retrieve_info
       - build
     variables:
-      - group: nodo-integration-test-${{ parameters.env }}
+      - group: nodo-integration-test-vg-${{ parameters.env }}
       - name: appVersion
         value: $[ stageDependencies.retrieve_info.retrieve_info.outputs['getVar.APP_VERSION'] ]
     jobs:
@@ -105,7 +105,7 @@ stages:
       - build
       - push_manifest
     variables:
-      - group: nodo-integration-test-${{ parameters.env }}
+      - group: nodo-integration-test-vg-${{ parameters.env }}
       - name: appVersion
         value: $[ stageDependencies.retrieve_info.retrieve_info.outputs['getVar.APP_VERSION'] ]
     condition: succeeded()

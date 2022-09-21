@@ -129,7 +129,7 @@ stages:
             displayName: 'Get Deployment'
             inputs:
               connectionType: 'Kubernetes Service Connection'
-              kubernetesServiceEndpoint: 'kube_integration_dev'
+              kubernetesServiceEndpoint: '$(kubernetes-service-connection-mock-psp-${{ parameters.env }})'
               namespace: 'mock-psp-dev'
               command: 'apply'
               arguments: "-f $(Pipeline.Workspace)/$(appVersion)-${{ parameters.env }}-manifest-app/*.yaml"

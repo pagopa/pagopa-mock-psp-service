@@ -6,6 +6,7 @@ parameters:
   - name: env
     displayName: Environment to deploy
     type: string
+    default: sit
     values:
       - dev
       - sit
@@ -13,6 +14,7 @@ variables:
   repository: 'mock-psp'
   dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
   kustomizeFolderApp: '$(Build.SourcesDirectory)/kustomize-mock-psp'
+  
 stages:
   - stage: retrieve_info
     displayName: "Retrieve info (${{ parameters.env }})"
@@ -25,16 +27,18 @@ stages:
             persistCredentials: true
           - script: |
               APP_VERSION=$(jq -r .version package.json)
+              echo "Versione: $APP_VERSION"
               echo "##vso[task.setvariable variable=APP_VERSION;isOutput=true]$APP_VERSION"
             displayName: Set version
             name: getVar
+            
   - stage: build
     displayName: "Build (${{ parameters.env }})"
     condition: succeeded()
     dependsOn:
       - retrieve_info
     variables:
-      - group: nodo-integration-test-vg-${{ parameters.env }}
+      - group: nodo-integration-test-${{ parameters.env }}
       - name: appVersion
         value: $[ stageDependencies.retrieve_info.retrieve_info.outputs['getVar.APP_VERSION'] ]
     jobs:
@@ -46,6 +50,8 @@ stages:
             versionSpec: '16.x'
           displayName: 'Install Node.js'
         - script: |
+            echo "VERSIONE: $appVersion"
+            echo "Ver2: $[ stageDependencies.retrieve_info.retrieve_info.outputs['getVar.APP_VERSION'] ]"
             npm install --legacy-peer-deps
           displayName: 'npm install'
         - script: |
@@ -70,8 +76,9 @@ stages:
     condition: succeeded()
     dependsOn:
       - retrieve_info
+      - build
     variables:
-      - group: nodo-integration-test-vg-${{ parameters.env }}
+      - group: nodo-integration-test-${{ parameters.env }}
       - name: appVersion
         value: $[ stageDependencies.retrieve_info.retrieve_info.outputs['getVar.APP_VERSION'] ]
     jobs:
@@ -99,7 +106,7 @@ stages:
       - build
       - push_manifest
     variables:
-      - group: nodo-integration-test-vg-${{ parameters.env }}
+      - group: nodo-integration-test-${{ parameters.env }}
       - name: appVersion
         value: $[ stageDependencies.retrieve_info.retrieve_info.outputs['getVar.APP_VERSION'] ]
     condition: succeeded()
@@ -110,16 +117,21 @@ stages:
         steps:
           - checkout: none
           - script: |
+              echo "Ver2: $[ stageDependencies.retrieve_info.retrieve_info.outputs['getVar.APP_VERSION'] ]"
               ls -la $(Pipeline.Workspace)/$(appVersion)-${{ parameters.env }}-manifest-app
               rm -rf $(Pipeline.Workspace)/$(appVersion)-${{ parameters.env }}-manifest-app
             displayName: "Clean old cached files $(appVersion)-${{ parameters.env }}-manifest-app"
           - download: current
             artifact: $(appVersion)-${{ parameters.env }}-manifest-app
             displayName: "Download manifest app $(appVersion)-${{ parameters.env }}-manifest-app"
-          - task: KubernetesManifest@0
-            displayName: "Deploy manifest for app"
+
+
+          - task: Kubernetes@1
+            displayName: 'Get Deployment'
             inputs:
-              action: 'deploy'
-              kubernetesServiceConnection:  $(kubernetes-service-connection-${{ parameters.env }})
-              namespace: mock-psp-${{ parameters.env }}
-              manifests: $(Pipeline.Workspace)/$(appVersion)-${{ parameters.env }}-manifest-app/*.yaml
+              connectionType: 'Kubernetes Service Connection'
+              kubernetesServiceEndpoint: '$(kubernetes-service-connection-mock-psp-${{ parameters.env }})'
+              namespace: 'mock-${{ parameters.env }}'
+              command: 'apply'
+              arguments: "-f $(Pipeline.Workspace)/$(appVersion)-${{ parameters.env }}-manifest-app/*.yaml"
+          

@@ -196,9 +196,13 @@ export async function newExpressApp(
           if (customResponse !== undefined) {         
             let convert = await xml2js.parseStringPromise(customResponse);
             let delay = convert['soapenv:Envelope']['soapenv:Body'][0]['psp:pspNotifyPaymentRes'][0].delay;
-            delete convert['soapenv:Envelope']['soapenv:Body'][0]['psp:pspNotifyPaymentRes'][0].delay;
+            let irraggiungibile = convert['soapenv:Envelope']['soapenv:Body'][0]['psp:pspNotifyPaymentRes'][0].irraggiungibile;
+              if(irraggiungibile) {
+                throw new TypeError("irraggiungibile");
+              }
             if (delay) {
               logger.info('>>> start timeout')
+              delete convert['soapenv:Envelope']['soapenv:Body'][0]['psp:pspNotifyPaymentRes'][0].delay;
               const builder = new xml2js.Builder();
               const xml = builder.buildObject(convert);
               var delay_numb: number = +delay[0];
@@ -238,9 +242,13 @@ export async function newExpressApp(
           if (customResponse !== undefined) {         
             let convert = await xml2js.parseStringPromise(customResponse);
             let delay = convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspInviaRPTResponse'][0]['pspInviaRPTResponse'][0].delay;
-            delete convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspInviaRPTResponse'][0]['pspInviaRPTResponse'][0].delay;
+            let irraggiungibile = convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspInviaRPTResponse'][0]['pspInviaRPTResponse'][0].irraggiungibile;
+              if(irraggiungibile) {
+                throw new TypeError("irraggiungibile");
+              }
             if (delay) {
               logger.info('>>> start timeout')
+              delete convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspInviaRPTResponse'][0]['pspInviaRPTResponse'][0].delay;
               const builder = new xml2js.Builder();
               const xml = builder.buildObject(convert);
               var delay_numb: number = +delay[0];
@@ -264,9 +272,13 @@ export async function newExpressApp(
           if (customResponse !== undefined) {         
             let convert = await xml2js.parseStringPromise(customResponse);
             let delay = convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspInviaCarrelloRPTCarteResponse'][0]['pspInviaCarrelloRPTCarteResponse'][0].delay;
-            delete convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspInviaCarrelloRPTCarteResponse'][0]['pspInviaCarrelloRPTCarteResponse'][0].delay;
+            let irraggiungibile = convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspInviaCarrelloRPTCarteResponse'][0]['pspInviaCarrelloRPTCarteResponse'][0].irraggiungibile;
+              if(irraggiungibile) {
+                throw new TypeError("irraggiungibile");
+              }
             if (delay) {
               logger.info('>>> start timeout')
+              delete convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspInviaCarrelloRPTCarteResponse'][0]['pspInviaCarrelloRPTCarteResponse'][0].delay;
               const builder = new xml2js.Builder();
               const xml = builder.buildObject(convert);
               var delay_numb: number = +delay[0];
@@ -290,9 +302,13 @@ export async function newExpressApp(
           if (customResponse !== undefined) {         
             let convert = await xml2js.parseStringPromise(customResponse);
             let delay = convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspInviaCarrelloRPTResponse'][0]['pspInviaCarrelloRPTResponse'][0].delay;
-            delete convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspInviaCarrelloRPTResponse'][0]['pspInviaCarrelloRPTResponse'][0].delay;
+            let irraggiungibile = convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspInviaCarrelloRPTResponse'][0]['pspInviaCarrelloRPTResponse'][0].irraggiungibile;
+              if(irraggiungibile) {
+                throw new TypeError("irraggiungibile");
+              }
             if (delay) {
               logger.info('>>> start timeout')
+              delete convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspInviaCarrelloRPTResponse'][0]['pspInviaCarrelloRPTResponse'][0].delay;
               const builder = new xml2js.Builder();
               const xml = builder.buildObject(convert);
               var delay_numb: number = +delay[0];
@@ -316,9 +332,13 @@ export async function newExpressApp(
           if (customResponse !== undefined) {         
             let convert = await xml2js.parseStringPromise(customResponse);
             let delay = convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspInviaAckRTResponse'][0]['pspInviaAckRTResponse'][0].delay;
-            delete convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspInviaAckRTResponse'][0]['pspInviaAckRTResponse'][0].delay;
+            let irraggiungibile = convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspInviaAckRTResponse'][0]['pspInviaAckRTResponse'][0].irraggiungibile;
+              if(irraggiungibile) {
+                throw new TypeError("irraggiungibile");
+              }
             if (delay) {
               logger.info('>>> start timeout')
+              delete convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspInviaAckRTResponse'][0]['pspInviaAckRTResponse'][0].delay;
               const builder = new xml2js.Builder();
               const xml = builder.buildObject(convert);
               var delay_numb: number = +delay[0];
@@ -342,9 +362,13 @@ export async function newExpressApp(
           if (customResponse !== undefined) {         
             let convert = await xml2js.parseStringPromise(customResponse);
             let delay = convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspChiediRTResponse'][0]['pspChiediRTResponse'][0].delay;
-            delete convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspChiediRTResponse'][0]['pspChiediRTResponse'][0].delay;
+            let irraggiungibile = convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspChiediRTResponse'][0]['pspChiediRTResponse'][0].irraggiungibile;
+              if(irraggiungibile) {
+                throw new TypeError("irraggiungibile");
+              }
             if (delay) {
               logger.info('>>> start timeout')
+              delete convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspChiediRTResponse'][0]['pspChiediRTResponse'][0].delay;
               const builder = new xml2js.Builder();
               const xml = builder.buildObject(convert);
               var delay_numb: number = +delay[0];
@@ -368,6 +392,10 @@ export async function newExpressApp(
           if (customResponse !== undefined) {         
             let convert = await xml2js.parseStringPromise(customResponse);
             let delay = convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspChiediListaRTResponse'][0]['pspChiediListaRTResponse'][0].delay;
+            let irraggiungibile = convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspChiediListaRTResponse'][0]['pspChiediListaRTResponse'][0].irraggiungibile;
+              if(irraggiungibile) {
+                throw new TypeError("irraggiungibile");
+              }
             delete convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspChiediListaRTResponse'][0]['pspChiediListaRTResponse'][0].delay;
             if (delay) {
               logger.info('>>> start timeout')
@@ -394,9 +422,13 @@ export async function newExpressApp(
           if (customResponse !== undefined) {         
             let convert = await xml2js.parseStringPromise(customResponse);
             let delay = convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspChiediAvanzamentoRPTResponse'][0]['pspChiediAvanzamentoRPTResponse'][0].delay;
-            delete convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspChiediAvanzamentoRPTResponse'][0]['pspChiediAvanzamentoRPTResponse'][0].delay;
+            let irraggiungibile = convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspChiediAvanzamentoRPTResponse'][0]['pspChiediAvanzamentoRPTResponse'][0].irraggiungibile;
+              if(irraggiungibile) {
+                throw new TypeError("irraggiungibile");
+              }
             if (delay) {
               logger.info('>>> start timeout')
+              delete convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspChiediAvanzamentoRPTResponse'][0]['pspChiediAvanzamentoRPTResponse'][0].delay;
               const builder = new xml2js.Builder();
               const xml = builder.buildObject(convert);
               var delay_numb: number = +delay[0];

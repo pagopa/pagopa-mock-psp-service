@@ -124,14 +124,14 @@ stages:
           - download: current
             artifact: $(appVersion)-${{ parameters.env }}-manifest-app
             displayName: "Download manifest app $(appVersion)-${{ parameters.env }}-manifest-app"
-
-
-          - task: Kubernetes@1
-            displayName: 'Get Deployment'
+          - task: KubernetesManifest@0
+            displayName: "Deploy manifest for app"
             inputs:
-              connectionType: 'Kubernetes Service Connection'
-              kubernetesServiceEndpoint: '$(kubernetes-service-connection-mock-psp-${{ parameters.env }})'
-              namespace: 'mock-${{ parameters.env }}'
-              command: 'apply'
-              arguments: "-f $(Pipeline.Workspace)/$(appVersion)-${{ parameters.env }}-manifest-app/*.yaml"
+              action: 'deploy'
+              kubernetesServiceConnection:  $(kubernetes-service-connection-mock-psp-${{ parameters.env }})
+              namespace: mock-ec-${{ parameters.env }}
+              manifests: $(Pipeline.Workspace)/$(appVersion)-${{ parameters.env }}-manifest-app/*.yaml
+
+
+
           

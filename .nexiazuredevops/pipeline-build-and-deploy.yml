@@ -59,9 +59,7 @@ stages:
             pwd
             ls -lrt
           displayName: 'npm build'
-        #- script: |
-        #    cp .nexi.env .env
-        #  displayName: 'Copy env'
+
         - task: Docker@2
           displayName: 'Build and push image'
           inputs:

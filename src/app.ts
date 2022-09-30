@@ -197,7 +197,7 @@ export async function newExpressApp(
             let convert = await xml2js.parseStringPromise(customResponse);
             let delay = convert['soapenv:Envelope']['soapenv:Body'][0]['psp:pspNotifyPaymentRes'][0].delay;
             let irraggiungibile = convert['soapenv:Envelope']['soapenv:Body'][0]['psp:pspNotifyPaymentRes'][0].irraggiungibile;
-              if(irraggiungibile) {
+            if(irraggiungibile) {
                 throw new TypeError("irraggiungibile");
               }
             if (delay) {
@@ -243,7 +243,7 @@ export async function newExpressApp(
             let convert = await xml2js.parseStringPromise(customResponse);
             let delay = convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspInviaRPTResponse'][0]['pspInviaRPTResponse'][0].delay;
             let irraggiungibile = convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspInviaRPTResponse'][0]['pspInviaRPTResponse'][0].irraggiungibile;
-              if(irraggiungibile) {
+            if(irraggiungibile) {
                 throw new TypeError("irraggiungibile");
               }
             if (delay) {
@@ -273,7 +273,7 @@ export async function newExpressApp(
             let convert = await xml2js.parseStringPromise(customResponse);
             let delay = convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspInviaCarrelloRPTCarteResponse'][0]['pspInviaCarrelloRPTCarteResponse'][0].delay;
             let irraggiungibile = convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspInviaCarrelloRPTCarteResponse'][0]['pspInviaCarrelloRPTCarteResponse'][0].irraggiungibile;
-              if(irraggiungibile) {
+            if(irraggiungibile) {
                 throw new TypeError("irraggiungibile");
               }
             if (delay) {
@@ -303,7 +303,7 @@ export async function newExpressApp(
             let convert = await xml2js.parseStringPromise(customResponse);
             let delay = convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspInviaCarrelloRPTResponse'][0]['pspInviaCarrelloRPTResponse'][0].delay;
             let irraggiungibile = convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspInviaCarrelloRPTResponse'][0]['pspInviaCarrelloRPTResponse'][0].irraggiungibile;
-              if(irraggiungibile) {
+            if(irraggiungibile) {
                 throw new TypeError("irraggiungibile");
               }
             if (delay) {
@@ -333,7 +333,7 @@ export async function newExpressApp(
             let convert = await xml2js.parseStringPromise(customResponse);
             let delay = convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspInviaAckRTResponse'][0]['pspInviaAckRTResponse'][0].delay;
             let irraggiungibile = convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspInviaAckRTResponse'][0]['pspInviaAckRTResponse'][0].irraggiungibile;
-              if(irraggiungibile) {
+            if(irraggiungibile) {
                 throw new TypeError("irraggiungibile");
               }
             if (delay) {
@@ -363,7 +363,7 @@ export async function newExpressApp(
             let convert = await xml2js.parseStringPromise(customResponse);
             let delay = convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspChiediRTResponse'][0]['pspChiediRTResponse'][0].delay;
             let irraggiungibile = convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspChiediRTResponse'][0]['pspChiediRTResponse'][0].irraggiungibile;
-              if(irraggiungibile) {
+            if(irraggiungibile) {
                 throw new TypeError("irraggiungibile");
               }
             if (delay) {
@@ -393,7 +393,7 @@ export async function newExpressApp(
             let convert = await xml2js.parseStringPromise(customResponse);
             let delay = convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspChiediListaRTResponse'][0]['pspChiediListaRTResponse'][0].delay;
             let irraggiungibile = convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspChiediListaRTResponse'][0]['pspChiediListaRTResponse'][0].irraggiungibile;
-              if(irraggiungibile) {
+            if(irraggiungibile) {
                 throw new TypeError("irraggiungibile");
               }
             delete convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspChiediListaRTResponse'][0]['pspChiediListaRTResponse'][0].delay;
@@ -423,7 +423,7 @@ export async function newExpressApp(
             let convert = await xml2js.parseStringPromise(customResponse);
             let delay = convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspChiediAvanzamentoRPTResponse'][0]['pspChiediAvanzamentoRPTResponse'][0].delay;
             let irraggiungibile = convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspChiediAvanzamentoRPTResponse'][0]['pspChiediAvanzamentoRPTResponse'][0].irraggiungibile;
-              if(irraggiungibile) {
+            if(irraggiungibile) {
                 throw new TypeError("irraggiungibile");
               }
             if (delay) {

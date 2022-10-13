@@ -195,14 +195,14 @@ export async function newExpressApp(
           logger.info(`>>> tx customResponse RESPONSE [${customResponse}]: `);
           if (customResponse !== undefined) {         
             let convert = await xml2js.parseStringPromise(customResponse);
-            let delay = convert['soapenv:Envelope']['soapenv:Body'][0]['psp:pspNotifyPaymentRes'][0].delay;
-            let irraggiungibile = convert['soapenv:Envelope']['soapenv:Body'][0]['psp:pspNotifyPaymentRes'][0].irraggiungibile;
+            let delay = convert['soapenv:Envelope']['soapenv:Body'][0]['pfn:pspNotifyPaymentRes'][0].delay;
+            let irraggiungibile = convert['soapenv:Envelope']['soapenv:Body'][0]['pfn:pspNotifyPaymentRes'][0].irraggiungibile;
             if(irraggiungibile) {
                 throw new TypeError("irraggiungibile");
               }
             if (delay) {
               logger.info('>>> start timeout')
-              delete convert['soapenv:Envelope']['soapenv:Body'][0]['psp:pspNotifyPaymentRes'][0].delay;
+              delete convert['soapenv:Envelope']['soapenv:Body'][0]['pfn:pspNotifyPaymentRes'][0].delay;
               const builder = new xml2js.Builder();
               const xml = builder.buildObject(convert);
               var delay_numb: number = +delay[0];

@@ -36,7 +36,7 @@ const pspChiediRTQueue = new Array<string>();
 const pspChiediListaRTQueue = new Array<string>();
 const pspChiediAvanzamentoRPTQueue = new Array<string>();
 //-------
-const pspnotifypaymentreq = 'pfn:pspnotifypaymentreq';
+const pspnotifypaymentreq = 'pspfn:pspnotifypaymentreq';
 const pspinviarptreq ='ppt:pspinviarpt';
 const pspinviacarrellorptcartereq='ppt:pspinviacarrellorptcarte';
 const pspinviacerrellorptreq='ppt:pspinviacarrellorpt';

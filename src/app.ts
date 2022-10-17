@@ -16,7 +16,8 @@ import {
   pspInviaAckRTRes,
   pspChiediRTRes,
   pspChiediListaRTRes,
-  pspChiediAvanzamentoRPTRes
+  pspChiediAvanzamentoRPTRes,
+  pspNotifyPaymentV2Res
 } from './fixtures/mockPSP';
 
 import { requireClientCertificateFingerprint } from './middlewares/requireClientCertificateFingerprint';
@@ -35,8 +36,9 @@ const pspInviaAckRTQueue = new Array<string>();
 const pspChiediRTQueue = new Array<string>();
 const pspChiediListaRTQueue = new Array<string>();
 const pspChiediAvanzamentoRPTQueue = new Array<string>();
+const pspNotifyPaymentV2Queue = new Array<string>();
 //-------
-const pspnotifypaymentreq = 'pspfn:pspnotifypaymentreq';
+const pspnotifypaymentreq = 'pfn:pspnotifypaymentreq';
 const pspinviarptreq ='ppt:pspinviarpt';
 const pspinviacarrellorptcartereq='ppt:pspinviacarrellorptcarte';
 const pspinviacarrellorptreq='ppt:pspinviacarrellorpt';
@@ -44,6 +46,7 @@ const pspinviaackrtreq='ppt:pspinviaackrt';
 const pspchiedirtreq='ppt:pspchiedirt';
 const pspchiedilistartreq='ppt:pspchiedilistart';
 const pspchiediavanzamentorptreq='ppt:pspchiediavanzamentorpt';
+const pspnotifypaymentv2req = 'pfn:pspnotifypaymentv2req';
 
 // tslint:disable-next-line: no-big-function
 export async function newExpressApp(
@@ -105,6 +108,15 @@ export async function newExpressApp(
       } else {
         pspNotifyPaymentQueue.push(req.rawBody);
         res.status(200).send(`${req.params.primitive} saved. ${pspNotifyPaymentQueue.length} pushed`);
+      }
+    } else if (req.params.primitive === 'pspNotifyPaymentV2') {
+      if (String(req.query.override).toLowerCase() === 'true') {
+        pspNotifyPaymentV2Queue.pop();
+        pspNotifyPaymentV2Queue.push(req.rawBody);
+        res.status(200).send(`${req.params.primitive} updated`);
+      } else {
+        pspNotifyPaymentV2Queue.push(req.rawBody);
+        res.status(200).send(`${req.params.primitive} saved. ${pspNotifyPaymentV2Queue.length} pushed`);
       }
     } else if (req.params.primitive === 'pspChiediAvanzamentoRPT') {
       if (String(req.query.override).toLowerCase() === 'true') {
@@ -188,6 +200,7 @@ export async function newExpressApp(
     const sleep = (ms:number) => new Promise(r => setTimeout(r, ms));
     try {
       const soapRequest = req.body['soapenv:envelope']['soapenv:body'][0];
+
       // 1. pspNotifyPayment
       if (soapRequest[pspnotifypaymentreq]) {
         if (pspNotifyPaymentQueue.length > 0) {
@@ -444,6 +457,52 @@ export async function newExpressApp(
         return res.status(+pspChiediAvanzamentoRPTRes[0]).send(pspChiediAvanzamentoRPTRes[1]);
       }
 
+      // 9. pspNotifyPaymentV2
+      if (soapRequest[pspnotifypaymentv2req]) {
+        if (pspNotifyPaymentV2Queue.length > 0) {
+          const customResponse = pspNotifyPaymentV2Queue.shift();
+          logger.info(`>>> tx customResponse RESPONSE [${customResponse}]: `);
+          if (customResponse !== undefined) {         
+            let convert = await xml2js.parseStringPromise(customResponse);
+            let delay = convert['soapenv:Envelope']['soapenv:Body'][0]['pfn:pspNotifyPaymentV2Res'][0].delay;
+            let irraggiungibile = convert['soapenv:Envelope']['soapenv:Body'][0]['pfn:pspNotifyPaymentV2Res'][0].irraggiungibile;
+            if(irraggiungibile) {
+                throw new TypeError("irraggiungibile");
+              }
+            if (delay) {
+              logger.info('>>> start timeout')
+              delete convert['soapenv:Envelope']['soapenv:Body'][0]['pfn:pspNotifyPaymentV2Res'][0].delay;
+              const builder = new xml2js.Builder();
+              const xml = builder.buildObject(convert);
+              var delay_numb: number = +delay[0];
+              logger.info(delay_numb);
+              await sleep(delay_numb);
+              return ritorno(res,xml);
+            } else {
+              return ritorno(res, customResponse);
+            }
+          }
+        }
+        const pspnotifypaymentv2 = soapRequest[pspnotifypaymentv2req][0];
+        const auxdigit = config.PA_MOCK.AUX_DIGIT;
+        const noticenumber: string = `${auxdigit}${pspnotifypaymentv2.creditorreferenceid}`;
+
+        if (testDebug.toUpperCase() === 'Y') {
+          noticenumberRequests.set(`${noticenumber}_pspNotifyPaymentV2`, req.body);
+        }
+
+        if (testDebug.toUpperCase() === 'Y') {
+          xml2js.parseString(pspNotifyPaymentV2Res[1], (err, result) => {
+            if (err) {
+              throw err;
+            }
+            noticenumberResponses.set(`${noticenumber}_pspNotifyPaymentV2`, result);
+          });
+        }
+        log_event_tx(pspNotifyPaymentV2Res);
+        return res.status(+pspNotifyPaymentV2Res[0]).send(pspNotifyPaymentV2Res[1]);
+      }      
+
 
       if (
         !(
@@ -454,7 +513,8 @@ export async function newExpressApp(
           soapRequest[pspinviaackrtreq] ||
           soapRequest[pspchiedirtreq] ||
           soapRequest[pspchiedilistartreq] ||
-          soapRequest[pspchiediavanzamentorptreq]
+          soapRequest[pspchiediavanzamentorptreq] ||
+          soapRequest[pspnotifypaymentv2req]
         )
       ) {
         // The SOAP Request not implemented

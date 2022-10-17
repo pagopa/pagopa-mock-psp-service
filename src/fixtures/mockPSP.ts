@@ -5,9 +5,9 @@ export const pspNotifyPaymentRes: MockResponse = [
   `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:psp="http://pagopa-api.pagopa.gov.it/psp/pspForNode.xsd">
   <soapenv:Header/>
   <soapenv:Body>
-      <psp:pspNotifyPaymentRes>
+      <pfn:pspNotifyPaymentRes>
           <outcome>OK</outcome>
-      </psp:pspNotifyPaymentRes>
+      </pfn:pspNotifyPaymentRes>
   </soapenv:Body>
 </soapenv:Envelope>`,
 ];
@@ -128,6 +128,18 @@ export const pspChiediAvanzamentoRPTRes: MockResponse = [
      </ws:pspChiediAvanzamentoRPTResponse>
   </soapenv:Body>
 </soapenv:Envelope>`,
+];
+
+export const pspNotifyPaymentV2Res: MockResponse = [
+  200,
+  `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:psp="http://pagopa-api.pagopa.gov.it/psp/pspForNode.xsd">
+  <soapenv:Header/>
+  <soapenv:Body>
+      <pfn:pspNotifyPaymentV2Res>
+        <outcome>OK</outcome>
+      </pfn:pspNotifyPaymentV2Res>
+  </soapenv:Body>
+  </soapenv:Envelope>`,
 ];
 
 

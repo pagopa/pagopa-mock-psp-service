@@ -39,7 +39,7 @@ const pspChiediAvanzamentoRPTQueue = new Array<string>();
 const pspnotifypaymentreq = 'pspfn:pspnotifypaymentreq';
 const pspinviarptreq ='ppt:pspinviarpt';
 const pspinviacarrellorptcartereq='ppt:pspinviacarrellorptcarte';
-const pspinviacerrellorptreq='ppt:pspinviacarrellorpt';
+const pspinviacarrellorptreq='ppt:pspinviacarrellorpt';
 const pspinviaackrtreq='ppt:pspinviaackrt';
 const pspchiedirtreq='ppt:pspchiedirt';
 const pspchiedilistartreq='ppt:pspchiedilistart';
@@ -271,14 +271,14 @@ export async function newExpressApp(
           logger.info(`>>> tx customResponse RESPONSE [${customResponse}]: `);
           if (customResponse !== undefined) {         
             let convert = await xml2js.parseStringPromise(customResponse);
-            let delay = convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspInviaCarrelloRPTCarteResponse'][0]['pspInviaCarrelloRPTCarteResponse'][0].delay;
-            let irraggiungibile = convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspInviaCarrelloRPTCarteResponse'][0]['pspInviaCarrelloRPTCarteResponse'][0].irraggiungibile;
+            let delay = convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspInviaCarrelloRPTCarteResponse'][0]['pspInviaCarrelloRPTResponse'][0].delay;
+            let irraggiungibile = convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspInviaCarrelloRPTCarteResponse'][0]['pspInviaCarrelloRPTResponse'][0].irraggiungibile;
             if(irraggiungibile) {
                 throw new TypeError("irraggiungibile");
               }
             if (delay) {
               logger.info('>>> start timeout')
-              delete convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspInviaCarrelloRPTCarteResponse'][0]['pspInviaCarrelloRPTCarteResponse'][0].delay;
+              delete convert['soapenv:Envelope']['soapenv:Body'][0]['ws:pspInviaCarrelloRPTCarteResponse'][0]['pspInviaCarrelloRPTResponse'][0].delay;
               const builder = new xml2js.Builder();
               const xml = builder.buildObject(convert);
               var delay_numb: number = +delay[0];
@@ -294,8 +294,8 @@ export async function newExpressApp(
         return res.status(+pspInviaCarrelloRPTCarteRes[0]).send(pspInviaCarrelloRPTCarteRes[1]);
       }
 
-      // 4. pspinviacerrellorpt
-      if (soapRequest[pspinviacerrellorptreq]) {
+      // 4. pspinviacarrellorpt
+      if (soapRequest[pspinviacarrellorptreq]) {
         if (pspInviaCarrelloRPTQueue.length > 0) {
           const customResponse = pspInviaCarrelloRPTQueue.shift();
           logger.info(`>>> tx customResponse RESPONSE [${customResponse}]: `);
@@ -450,7 +450,7 @@ export async function newExpressApp(
           soapRequest[pspnotifypaymentreq] ||
           soapRequest[pspinviarptreq] ||
           soapRequest[pspinviacarrellorptcartereq] ||
-          soapRequest[pspinviacerrellorptreq] ||
+          soapRequest[pspinviacarrellorptreq] ||
           soapRequest[pspinviaackrtreq] ||
           soapRequest[pspchiedirtreq] ||
           soapRequest[pspchiedilistartreq] ||

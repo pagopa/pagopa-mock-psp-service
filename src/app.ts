@@ -46,7 +46,7 @@ const pspinviaackrtreq='ppt:pspinviaackrt';
 const pspchiedirtreq='ppt:pspchiedirt';
 const pspchiedilistartreq='ppt:pspchiedilistart';
 const pspchiediavanzamentorptreq='ppt:pspchiediavanzamentorpt';
-const pspnotifypaymentv2req = 'pfn:pspnotifypaymentv2req';
+const pspnotifypaymentv2req = 'pfn:pspnotifypaymentv2';
 
 // tslint:disable-next-line: no-big-function
 export async function newExpressApp(

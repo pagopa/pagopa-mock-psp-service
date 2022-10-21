@@ -5,7 +5,7 @@ namespace: mock-dev
 
 images:
   - name: mock-psp-image
-    newName: nodopasitregistry.azurecr.io/mock-psp
+    newName: nodopasitregistry.azurecr.io/mock-psp-primary
     newTag: 0.0.1
 
 resources:

@@ -1,0 +1,9 @@
+commonLabels:
+  app: psp-sec-mock
+
+resources:
+  - deployment.yaml
+  - service.yaml
+
+generatorOptions:
+  disableNameSuffixHash: true

@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: psp-sec-mock
+spec:
+  ports:
+    - name: psp-sec-mock
+      port: 8091
+      protocol: TCP
+      targetPort: 8091

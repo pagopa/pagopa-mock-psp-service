@@ -624,7 +624,7 @@ export async function newExpressApp(
       // tslint:disable-next-line: prettier
     } catch (error) {
       // The SOAP Request isnt' correct
-      logger.info(`The SOAP Request isnt' correct`);
+      logger.info(`The SOAP Request isn't correct,${error}`);
       res.status(500).send('Internal Server Error :( ');
     }
     // tslint:disable-next-line: no-empty

@@ -9,7 +9,7 @@ basemock: &basemock
       maxUnavailable: 0
       maxSurge: 1
   image:
-    repository: pagopadcommonacr.azurecr.io/pagopamockpspservice
+    repository: pagopaucommonacr.azurecr.io/pagopamockpspservice
     tag: "0.0.1"
     pullPolicy: Always
   readinessProbe:

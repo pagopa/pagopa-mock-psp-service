@@ -38,10 +38,6 @@ parameters:
 variables:
   imageRepository: '$(IMAGE_REPOSITORY_NAME)'
   nameSpace: '$(K8S_NAMESPACE)'
-  appName: $(imageRepository)
-
-  ${{ if or(eq(parameters['ENV'], 'it'), eq(parameters['ENV'], 'prf')) }}:
-    appName: '$(imageRepository)-replica'
 
   ${{ if eq(parameters['ENV'], 'dev') }}:
     dockerRegistryServiceConnection: $(DEV_CONTAINER_REGISTRY_SERVICE_CONN)

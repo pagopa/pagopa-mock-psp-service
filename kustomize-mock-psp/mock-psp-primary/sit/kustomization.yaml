@@ -5,13 +5,12 @@ namespace: mock-sit
 
 images:
   - name: mock-psp-image
-    newName: nodopasitregistry.azurecr.io/mock-psp-primary
-    newTag: 0.0.1
+    newName: toolbox.sia.eu/docker-pagopa/mock-psp-primary
+    newTag: 1.6.11
 
 resources:
-  - namespace.yaml
-  - ingress.yaml
   - ../base
+  - route.yaml
 
 generatorOptions:
   disableNameSuffixHash: true

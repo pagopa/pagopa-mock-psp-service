@@ -1,0 +1,15 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: "mock-psp-sec" 
+spec:
+  host: mock-psp-secondary-sit.tst-npc.sia.eu
+  port:
+    targetPort: 8091
+  path: "/"
+  to:
+    kind: Service
+    name: "psp-sec-mock"
+    weight: 100
+  wildcardPolicy: None
+

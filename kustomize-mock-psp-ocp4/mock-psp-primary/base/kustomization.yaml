@@ -1,0 +1,9 @@
+commonLabels:
+  app: mock-psp
+
+resources:
+  - deployment.yaml
+  - service.yaml
+
+generatorOptions:
+  disableNameSuffixHash: true

@@ -3,10 +3,10 @@ kind: Route
 metadata:
   name: "mock-psp-sec" 
 spec:
-  host: test.nexi.ndp.pagopa.it
+  host: mock-psp-secondary-sit.nexigroup.com
   port:
     targetPort: 8091
-  path: "/mock-psp-secondary-sit"
+  path: "/"
   to:
     kind: Service
     name: "psp-sec-mock"
